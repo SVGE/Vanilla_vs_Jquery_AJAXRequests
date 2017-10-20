@@ -16,40 +16,28 @@ function expandUrl() {
   const urlToExpand = url + 
         '?key=' + apiKey +
         '&shortUrl=' + $inputField.val();
-  $.ajax({
-    url: urlToExpand, 
-    type: 'GET',
-    dataType: 'json', 
-    success(response) {
-      $responseField.append('<p>Your expanded url is: </p><p>' + response.longUrl + '</p>');
-    }, error(jqXHR, status, errorThrown) {
-      console.log(jqXHR);
-    }
-  });
+  $.getJSON(urlToExpand, response => {
+  	$responseField.append('<p>Your expanded url is: </p><p>' +
+  	response.longUrl + '</p>');
+	});
 }
 
 function shortenUrl() {
   const urlWithKey = url + '?key=' + apiKey;
   const urlToShorten = $inputField.val();
-  $.ajax({
-    url: urlWithKey, 
-    type: 'POST',
-    data: JSON.stringify({longUrl: urlToShorten}),
-    dataType: 'json',
-    contentType: 'application/json',
+
+  $.post({
+    url: urlWithKey,  
+    data: JSON.stringify({longUrl: urlToShorten}), 
+    dataType: 'json', 
+    contentType: 'application/json', 
     success(response) {
-      $responseField.append('<p>Your shortened url is: </p><p>' + response.id + '</p>'); 
+      $responseField.append('<p>Your shortened url is: </p><p>' + response.id + '</p>');
     },
     error(jqXHR, status, errorThrown) {
-    console.log(jqXHR)
-  }
-  }); 
-
-
-
-  xhr.open('POST', urlWithKey);
-  xhr.setRequestHeader('Content-Type', 'application/json');
-  xhr.send(data);
+      console.log(jqXHR);
+    }
+  });
 }
 
 function expand() {
